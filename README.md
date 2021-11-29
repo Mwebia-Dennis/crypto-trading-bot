@@ -4,10 +4,10 @@ This project is a website application that predicts minute to minute bitcoin clo
 
 ### Features
 
-=> displays real time bitcoin prices
-=> 2 powerful Neural network models to help predict the prices
-=> predicting the next minute price (if current time is 11:00 AM the model predicts price for 11:01 AM)
-=> forms to input and predict from your own custom values
+displays real time bitcoin prices
+,2 powerful Neural network models to help predict the prices
+,predicting the next minute price (if current time is 11:00 AM the model predicts price for 11:01 AM)
+,forms to input and predict from your own custom values
 
 ## What it does
 
