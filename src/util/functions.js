@@ -45,3 +45,43 @@ export const getValueDifference = (previousValue, currentValue)=>{
 function formatMinutes(mins){
     return mins.toString().length > 1?mins:"0"+mins
 }
+
+export function getInitialValues (closePricesDates, firstPredictDate) {
+
+
+
+    const predictDate = new Date(firstPredictDate)
+    const data = closePricesDates.filter(date=>predictDate.getTime() > new Date(date).getTime() )
+    return [...Array(data.length).keys()].map(()=>undefined)
+
+
+}
+
+export function getPredictedValues (predictedPrices, closePricesDates) {
+
+    const values = []
+    console.log(predictedPrices.prices)
+    /**
+     * loop through all dates from the bitcoin api
+     * if the date is in the predicted array add the price else add none
+     * then loop through predited array to check if there is unique data from real dates and add the price
+     */
+    closePricesDates.forEach(date => {
+        if(predictedPrices.dates.includes( new Date(date).toString() )) {
+            values.push(predictedPrices.prices[predictedPrices.dates.indexOf(new Date(date).toString())])
+        }else {
+            values.push(undefined)
+        }
+        
+    })
+
+    predictedPrices.dates.forEach((_date, i)=>{
+        if(!closePricesDates.includes( new Date(_date).toString() )) {
+            values.push(predictedPrices.prices[i])
+        }
+    })
+
+    return values
+
+
+}

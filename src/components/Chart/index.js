@@ -3,14 +3,15 @@ import { Line } from 'react-chartjs-2';
 
 export default function Chart(props) {
 
-    const { _data, labels } = props
+    const { _data, labels,predictedData } = props
 
-    const counter = 30
-    const _predictedData = []
-    for (let index = 0; index < counter; index++) {
+    // const counter = 30
+    // const _predictedData = []
+    // for (let index = 0; index < counter; index++) {
             
-        _predictedData.push(Math.floor(Math.random() * 50000) + 40000)
-    }
+    //     _predictedData.push(Math.floor(Math.random() * 50000) + 40000)
+    // }
+    console.log(predictedData)
     const data = {
         labels: labels,//[...Array(counter).keys()],
         datasets: [
@@ -22,14 +23,14 @@ export default function Chart(props) {
             borderColor: 'rgba(255, 102, 102, 1)',
             borderWidth: 1
           },
-          // {
-          //   label: 'Predicted Price',
-          //   data: _predictedData,
-          //   fill: false,
-          //   // backgroundColor: 'rgb(255, 99, 132)',
-          //   borderColor: '#3399ff',
-          //   borderWidth: 1
-          // },
+          {
+            label: 'Predicted Price',
+            data: predictedData,
+            fill: false,
+            // backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: '#3399ff',
+            borderWidth: 1
+          },
         ],
       };
 

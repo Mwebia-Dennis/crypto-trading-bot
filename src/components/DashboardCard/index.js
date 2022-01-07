@@ -40,13 +40,13 @@ export default function BasicCard(props) {
                     className={classes.cardText+ " "+ classes.cardTextRight}
                     style={{color: data.isDecrease?red[900]:green[900]}}
                 >
-                    {data.isDecrease?data.percentChange:"+"+data.percentChange}%
+                    {data.isDecrease?data.percentChange:data.percentChange}%
                 </span><br/>
                 <span 
                     className={classes.cardText+ " "+ classes.cardTextRight}
                     style={{color: data.isDecrease?red[900]:green[900]}}
                 >
-                    {data.isDecrease?data.percentChangeAmt:"+"+data.percentChangeAmt}
+                    {data.isDecrease?data.percentChangeAmt:data.percentChangeAmt}
                 </span>
             </Grid>
 

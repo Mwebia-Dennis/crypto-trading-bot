@@ -9,7 +9,12 @@ import Chart from '../../components/Chart'
 import Footer from '../../components/footer/index.js'
 import { useDispatch,useSelector } from 'react-redux'
 import { getPredictions, getClosePrices } from '../../store/reducers/predict/predict.actions'
-import { getClosePricesValues, getCloseDateValues, getValueDifference } from '../../util/functions.js'
+import { 
+    getClosePricesValues, 
+    getCloseDateValues, 
+    getValueDifference,
+    getPredictedValues 
+} from '../../util/functions.js'
 import { red, green } from '@mui/material/colors';
 const predictedPrices = {
     dates: [],
@@ -31,15 +36,20 @@ export default function Home () {
         setModelType(event.target.value);
     };
 
+
     if("predicted_close_price" in predictReducer.data) {
         
-        let predictedDate = predictReducer.closePrices.length > 0?new Date(predictReducer.closePrices["0"]["time_close"]):new Date() 
-        predictedDate = new Date(predictedDate.getTime() + (1000*60))
-        predictedPrices.dates.push(predictedDate.toString())
-        predictedPrices.prices.push(parseFloat(predictReducer.data.predicted_close_price[0]).toFixed(2))
+            if (predictReducer.closePrices.length > 0) {
+                let predictedDate = new Date(predictReducer.closePrices["0"]["time_close"])
+                predictedDate = new Date(predictedDate.getTime() + (1000*60))
+                if(!predictedPrices.dates.includes(predictedDate.toString())){
+                    predictedPrices.dates.push(predictedDate.toString())
+                    predictedPrices.prices.push(parseFloat(predictReducer.data.predicted_close_price[0]).toFixed(2))
+                }
+            }
     }
     
-    const predictedPriceDifference = predictedPrices.prices.length > 0?getValueDifference(closePrices[closePrices.length-2],
+    const predictedPriceDifference = predictedPrices.prices.length > 0?getValueDifference(closePrices[closePrices.length-1],
              predictedPrices.prices[predictedPrices.prices.length-1]):{
                 change: 0,
                 percentChange: 0,
@@ -92,7 +102,11 @@ export default function Home () {
     useEffect(() => {
         
         dispatch(getClosePrices())
-    }, [])
+        const timer = setInterval(() => {
+            dispatch(getClosePrices())
+          }, 1000 * 60)// 1 minute
+          return () => clearInterval(timer)
+    }, [modelType])
 
     useEffect(() => {
         
@@ -183,7 +197,7 @@ export default function Home () {
                         </Typography>
 
                     </Grid>
-                    <Grid item md={4}>
+                    <Grid item md={5}>
 
                         <Typography variant="h3">
                             {predictedPrices.prices.length > 0?predictedPrices.prices[predictedPrices.prices.length - 1]:0}
@@ -211,6 +225,14 @@ export default function Home () {
                             <Chart 
                                 _data={closePrices}
                                 labels = {dates}
+                                predictedData = {
+                                    getPredictedValues ( predictedPrices, predictReducer.closePrices.map(item=>item["time_close"]) )
+                                    // getInitialValues(
+                                    //     predictReducer.closePrices.map(item=>item["time_close"]),
+
+                                    //     predictedPrices.dates[0]
+                                    // ).concat(predictedPrices.prices)
+                                } //{predictedPrices.prices}
                             />
                         </Grid>
                         <Grid item md={4}>
@@ -236,7 +258,7 @@ export default function Home () {
                                             <ListItem>
                                                 <ListItemText
                                                     secondary={
-                                                        <span style={{color: "#0000ff"}} >{modelError.percentChange + "%"} </span>
+                                                        <span style={{color: "#0000ff"}} >{Math.abs(modelError.percentChange) + "%"} </span>
                                                     }
                                                     primary={"Model Error"}
                                                     style={{color: "#0000ff"}}

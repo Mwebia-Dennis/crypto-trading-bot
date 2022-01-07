@@ -56,7 +56,8 @@ export const useStyles = makeStyles((theme) => ({
       backgroundColor: '#f2f2f2 !important',
       
       [theme.breakpoints.down('sm')]: {
-        width: '100%'
+        width: '95%',
+        marginLeft: 0,
     }
   }
 

@@ -41,7 +41,7 @@ export const getPredictions = (closePrices, modelType = 'lstm') => (dispatch) =>
 
 }
 
-export const getClosePrices = ( period_id = "1MIN", limit = 5) => (dispatch) => {
+export const getClosePrices = ( period_id = "1MIN", limit = 10) => (dispatch) => {
 
     const config = {
         headers: {
